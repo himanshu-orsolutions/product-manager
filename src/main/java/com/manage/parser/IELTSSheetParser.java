@@ -41,9 +41,9 @@ public class IELTSSheetParser {
 			Iterator<Row> iterator = sheet.iterator();
 
 			if (iterator.hasNext()) {
-
-				// Skipping the first empty row
-				iterator.next();
+//
+//				// Skipping the first empty row
+//				iterator.next();
 
 				// Parsing the column headings
 				List<String> headings = new ArrayList<>();

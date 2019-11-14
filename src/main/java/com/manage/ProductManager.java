@@ -2,8 +2,8 @@ package com.manage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.bson.Document;
 
@@ -32,12 +32,12 @@ public class ProductManager {
 	/**
 	 * The countries set
 	 */
-	private static HashSet<String> countries = new HashSet<>();
+	private static TreeSet<String> countries = new TreeSet<>();
 
 	/**
 	 * The names set
 	 */
-	private static HashSet<String> names = new HashSet<>();
+	private static TreeSet<String> names = new TreeSet<>();
 
 	/**
 	 * Maps row IETLS data into models
@@ -100,10 +100,34 @@ public class ProductManager {
 		// The countries list
 		ieltsRecords.forEach(record -> countries.add(record.getCountry()));
 		schoolRecords.forEach(record -> countries.add(record.getCountry()));
+		countries.remove("");
 
 		// The candidates list
 		ieltsRecords.forEach(record -> names.add(record.getCandidateName()));
 		schoolRecords.forEach(record -> names.add(record.getCandidateName()));
+		names.remove("");
+	}
+
+	/**
+	 * Gets the information of product
+	 * 
+	 * @param productType   The product type
+	 * @param country       The country
+	 * @param candidateName the candidate name
+	 * @param referenceId   The reference ID
+	 * @return The product information
+	 */
+	private static String getInformation(String productType, String country, String candidateName, String referenceId) {
+
+		if (productType.equals("IELTS")) {
+			IELTS ielts = ieltsMap.get(country + " " + candidateName + " " + referenceId);
+			System.out.println(ielts.toString());
+		} else {
+			School school = schoolMap.get(country + " " + candidateName + " " + referenceId);
+			System.out.println(school.toString());
+		}
+
+		return "";
 	}
 
 	/**
@@ -113,5 +137,6 @@ public class ProductManager {
 	 */
 	public static void main(String[] args) {
 
+		init(); // Initializes the application environment
 	}
 }
