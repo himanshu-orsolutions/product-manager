@@ -16,24 +16,24 @@ import org.bson.Document;
 import com.monitorjbl.xlsx.StreamingReader;
 
 /**
- * The IELTSSheetParser. It holds implementation to parse the IELTS sheet.
+ * The SchoolSheetParser. It holds implementation to parse the Schools sheet.
  */
-public class IELTSSheetParser {
+public class SchoolsSheetParser {
 
-	private IELTSSheetParser() {
+	private SchoolsSheetParser() {
 		// Its a utility class. Thus instantiation is not allowed.
 	}
 
 	/**
-	 * Parses the IELTS Sheet
+	 * Parses the Schools Sheet
 	 * 
 	 * @param filePath The file path
 	 * @return The parsed document
 	 */
 	public static Document parse(String filePath) {
 
-		Document ielts = new Document(); // It holds the final parsed document
-		List<Document> data = new ArrayList<>(); // It holds the list of IELTS records
+		Document schools = new Document(); // It holds the final parsed document
+		List<Document> data = new ArrayList<>(); // It holds the list of school records
 
 		try (Workbook workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096)
 				.open(new File(filePath))) { // The file is read in chunks to avoid crashing in case of large sizes
@@ -41,9 +41,6 @@ public class IELTSSheetParser {
 			Iterator<Row> iterator = sheet.iterator();
 
 			if (iterator.hasNext()) {
-
-				// Skipping the first empty row
-				iterator.next();
 
 				// Parsing the column headings
 				List<String> headings = new ArrayList<>();
@@ -70,12 +67,12 @@ public class IELTSSheetParser {
 					}
 				}
 			}
-			ielts.put("data", data);
+			schools.put("data", data);
 		} catch (FileNotFoundException fileNotFoundException) {
-			System.out.println("Error: The IELTS report not found.");
+			System.out.println("Error: The Schools report not found.");
 		} catch (IOException ioException) {
-			System.out.println("Error: Reading IELTS report failed.");
+			System.out.println("Error: Reading Schools report failed.");
 		}
-		return ielts;
+		return schools;
 	}
 }
