@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JRootPane;
+
 import org.bson.Document;
 
 import com.manage.mapper.IELTSMapper;
@@ -13,6 +18,7 @@ import com.manage.model.IELTS;
 import com.manage.model.School;
 import com.manage.parser.IELTSSheetParser;
 import com.manage.parser.SchoolsSheetParser;
+import com.manage.util.BarCodeGenerator;
 
 /**
  * The Product Manager.
@@ -128,6 +134,28 @@ public class ProductManager {
 		}
 
 		return "";
+	}
+
+	private static void generateBarCode(String data) {
+
+		// Creating popup frame
+		JFrame popup = new JFrame();
+		popup.setResizable(false);
+		popup.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		popup.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+		popup.setLocationRelativeTo(null);
+
+		// Image Icon
+		byte[] imageBytes = BarCodeGenerator.generateBarCode(data);
+		ImageIcon image = new ImageIcon(imageBytes);
+
+		// Creating the image label
+		JLabel imageLabel = new JLabel(image);
+
+		// Adding the image component
+		popup.getContentPane().add(imageLabel);
+		popup.setSize(image.getIconWidth(), image.getIconHeight() + 10);
+		popup.setVisible(true);
 	}
 
 	/**
