@@ -100,6 +100,16 @@ public class IELTS {
 	 * Gets the string representation of the IELTS model
 	 */
 	public String toString() {
-		return this.country + " " + this.candidateName + " " + this.reference;
+
+		StringBuilder keyBuilder = new StringBuilder();
+		keyBuilder.append(this.country);
+		keyBuilder.append(" ");
+		keyBuilder.append(this.candidateName);
+		keyBuilder.append(" ");
+
+		if (!this.reference.equals("")) {
+			keyBuilder.append(this.reference.substring(this.reference.length() - 7));
+		}
+		return keyBuilder.toString();
 	}
 }

@@ -5,7 +5,8 @@ package com.manage.model;
  */
 public class School {
 
-	private String candidateName;
+	private String firstName;
+	private String lastName;
 	private String country;
 	private String centreName;
 	private String totalLocalFee;
@@ -13,12 +14,20 @@ public class School {
 	private String registrationId;
 	private String paymentReference;
 
-	public String getCandidateName() {
-		return candidateName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setCandidateName(String candidateName) {
-		this.candidateName = candidateName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getCountry() {
@@ -73,6 +82,16 @@ public class School {
 	 * Gets the string representation of the IELTS model
 	 */
 	public String toString() {
-		return this.country + " " + this.candidateName + " " + this.registrationId;
+
+		StringBuilder keyBuilder = new StringBuilder();
+		keyBuilder.append(this.country);
+		keyBuilder.append(" ");
+		keyBuilder.append(this.lastName);
+		keyBuilder.append(" ");
+
+		if (!this.registrationId.equals("")) {
+			keyBuilder.append(this.registrationId.substring(this.registrationId.length() - 7));
+		}
+		return keyBuilder.toString();
 	}
 }

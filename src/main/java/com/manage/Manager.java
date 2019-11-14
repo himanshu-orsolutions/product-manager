@@ -1,5 +1,7 @@
 package com.manage;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,11 +52,6 @@ public class Manager extends javax.swing.JFrame {
 	 * The countries set
 	 */
 	private static TreeSet<String> countries = new TreeSet<>();
-
-	/**
-	 * The names set
-	 */
-	private static TreeSet<String> names = new TreeSet<>();
 
 	/**
 	 * Shows error message
@@ -124,11 +121,6 @@ public class Manager extends javax.swing.JFrame {
 		// The countries list
 		ieltsRecords.forEach(record -> countries.add(record.getCountry()));
 		schoolRecords.forEach(record -> countries.add(record.getCountry()));
-
-		// The candidates list
-		ieltsRecords.forEach(record -> names.add(record.getCandidateName()));
-		schoolRecords.forEach(record -> names.add(record.getCandidateName()));
-		names.remove("");
 	}
 
 	/**
@@ -140,44 +132,29 @@ public class Manager extends javax.swing.JFrame {
 	 * @param referenceId   The reference ID
 	 * @return The product information
 	 */
-	private String getInformation(String productType, String country, String candidateName, String referenceId) {
+	private Object getInformation(String productType, String country, String candidateName, String referenceId) {
 
-		StringBuilder stringBuilder = new StringBuilder();
 		if (productType.equals("IELTS")) {
-			IELTS ielts = ieltsMap.get(country + " " + candidateName + " " + referenceId);
-			stringBuilder.append("Location: " + ielts.getLocation());
-			stringBuilder.append("\n");
-			stringBuilder.append("Exam Format: " + ielts.getExamFormat());
-			stringBuilder.append("\n");
-			stringBuilder.append("Registration Date: " + ielts.getRegistrationDate());
-			stringBuilder.append("\n");
-			stringBuilder.append("Test Date: " + ielts.getTestDate());
-			stringBuilder.append("\n");
-			stringBuilder.append("Payment Ref: " + ielts.getPaymentRef());
-			stringBuilder.append("\n");
-			stringBuilder.append("Payment Type: " + ielts.getPaymentType());
-			stringBuilder.append("\n");
-			stringBuilder.append("Total: " + ielts.getTotal());
+			String key = country + " " + candidateName + " " + referenceId;
+			if (ieltsMap.containsKey(key)) {
+				return ieltsMap.get(key);
+			}
 		} else {
-			School school = schoolMap.get(country + " " + candidateName + " " + referenceId);
-			stringBuilder.append("Centre Name: " + school.getCentreName());
-			stringBuilder.append("\n");
-			stringBuilder.append("Total Local Fee($): " + school.getTotalLocalFee());
-			stringBuilder.append("\n");
-			stringBuilder.append("Number Of Exams: " + school.getNumberOfExams());
-			stringBuilder.append("\n");
-			stringBuilder.append("Payment Reference: " + school.getPaymentReference());
-			stringBuilder.append("\n");
+			String key = country + " " + candidateName + " " + referenceId;
+			if (schoolMap.containsKey(key)) {
+				return schoolMap.get(key);
+			}
 		}
-		return stringBuilder.toString();
+		return null;
 	}
 
 	/**
-	 * Generates the barcode
+	 * Generates the bar-code
 	 * 
-	 * @param data The data
+	 * @param referenceNumber The reference number
+	 * @param searchResult    The search result
 	 */
-	private void generateBarCode(String data) {
+	private void generateBarCode(String referenceNumber, String searchResult) {
 
 		// Creating popup frame
 		JFrame popup = new JFrame();
@@ -187,8 +164,7 @@ public class Manager extends javax.swing.JFrame {
 		popup.setLocationRelativeTo(this);
 
 		// Image Icon
-		byte[] imageBytes = BarCodeGenerator.generateBarCode(data);
-		ImageIcon image = new ImageIcon(imageBytes);
+		ImageIcon image = new ImageIcon(BarCodeGenerator.generateBarCode(referenceNumber, searchResult));
 
 		// Creating the image label
 		JLabel imageLabel = new JLabel(image);
@@ -205,12 +181,12 @@ public class Manager extends javax.swing.JFrame {
 		logo = new javax.swing.JLabel();
 		userOptionsPane = new javax.swing.JLayeredPane();
 		countryLabel = new javax.swing.JLabel();
-		candidateNameLabel = new javax.swing.JLabel();
+		nameLabel = new javax.swing.JLabel();
 		referenceIdLabel = new javax.swing.JLabel();
 		productTypeLabel = new javax.swing.JLabel();
 		productTypeDropdown = new javax.swing.JComboBox<>();
 		countryDropDown = new javax.swing.JComboBox<>();
-		candidateNameField = new javax.swing.JTextField();
+		nameField = new javax.swing.JTextField();
 		referenceIdField = new javax.swing.JTextField();
 		searchButton = new javax.swing.JButton();
 		resultPane = new javax.swing.JLayeredPane();
@@ -254,29 +230,96 @@ public class Manager extends javax.swing.JFrame {
 
 		countryLabel.setText("Country");
 
-		candidateNameLabel.setText("Candidate Name");
+		nameLabel.setText("Candidate Name");
 
 		referenceIdLabel.setText("Reference ID");
+		referenceIdField.setToolTipText("Please fill only last 7 numbers");
+		referenceIdField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (referenceIdField.getText().length() == 7) {
+					e.consume();
+				}
+			}
+		});
 
 		productTypeLabel.setText("Product Type");
 
 		productTypeDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IELTS", "School" }));
+		productTypeDropdown.addActionListener(event -> {
+
+			switch ((String) productTypeDropdown.getSelectedItem()) {
+			case "IELTS":
+				nameLabel.setText("Candidate Name");
+				break;
+			case "School":
+				nameLabel.setText("Last Name");
+				break;
+			}
+		});
 
 		countryDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(countries.toArray()));
-
 		searchButton.setText("Search");
+		StringBuilder barcodeDataBuilder = new StringBuilder();
+
 		searchButton.addActionListener(event -> {
 			String productType = ((String) productTypeDropdown.getSelectedItem()).trim();
 			String country = ((String) countryDropDown.getSelectedItem()).trim();
-			String candidateName = candidateNameField.getText().trim();
+			String name = nameField.getText().trim();
 			String referenceId = referenceIdField.getText().trim();
 
 			// Searching for candidate
-			String searchResult = getInformation(productType, country, candidateName, referenceId);
-			if (searchResult.equals("")) {
+			Object info = getInformation(productType, country, name, referenceId);
+			if (info == null) {
 				showErrorMessage("No information found!!");
 			} else {
-				informationArea.setText(searchResult);
+				StringBuilder stringBuilder = new StringBuilder();
+				if (productType.equals("IELTS")) {
+					IELTS ielts = (IELTS) info;
+					stringBuilder.append("Location: " + ielts.getLocation());
+					stringBuilder.append("\n");
+					stringBuilder.append("Exam Format: " + ielts.getExamFormat());
+					stringBuilder.append("\n");
+					stringBuilder.append("Registration Date: " + ielts.getRegistrationDate());
+					stringBuilder.append("\n");
+					stringBuilder.append("Test Date: " + ielts.getTestDate());
+					stringBuilder.append("\n");
+					stringBuilder.append("Payment Ref: " + ielts.getPaymentRef());
+					stringBuilder.append("\n");
+					stringBuilder.append("Payment Type: " + ielts.getPaymentType());
+					stringBuilder.append("\n");
+					stringBuilder.append("Total: " + ielts.getTotal());
+
+					// Building barcode data
+					barcodeDataBuilder.append("Candidate Name: " + ielts.getCandidateName());
+					barcodeDataBuilder.append("\n");
+					barcodeDataBuilder.append("Reference ID: " + ielts.getReference());
+					barcodeDataBuilder.append("\n");
+					barcodeDataBuilder.append("Total Amount: " + ielts.getTotal());
+					barcodeDataBuilder.append("\n");
+					barcodeDataBuilder.append("Country: " + ielts.getCountry());
+				} else {
+					School school = (School) info;
+					stringBuilder.append("Centre Name: " + school.getCentreName());
+					stringBuilder.append("\n");
+					stringBuilder.append("Total Local Fee($): " + school.getTotalLocalFee());
+					stringBuilder.append("\n");
+					stringBuilder.append("Number Of Exams: " + school.getNumberOfExams());
+					stringBuilder.append("\n");
+					stringBuilder.append("Payment Reference: " + school.getPaymentReference());
+					stringBuilder.append("\n");
+
+					// Building barcode data
+					barcodeDataBuilder
+							.append("Candidate Name: " + (school.getFirstName() + " " + school.getLastName()).trim());
+					barcodeDataBuilder.append("\n");
+					barcodeDataBuilder.append("Reference ID: " + school.getRegistrationId());
+					barcodeDataBuilder.append("\n");
+					barcodeDataBuilder.append("Total Amount: " + school.getTotalLocalFee());
+					barcodeDataBuilder.append("\n");
+					barcodeDataBuilder.append("Country: " + school.getCountry());
+				}
+				informationArea.setText(stringBuilder.toString());
 			}
 		});
 
@@ -284,17 +327,17 @@ public class Manager extends javax.swing.JFrame {
 			if (informationArea.getText().equals("")) {
 				showErrorMessage("No candidate selected!!");
 			} else {
-				generateBarCode(referenceIdField.getText());
+				generateBarCode(referenceIdField.getText(), barcodeDataBuilder.toString());
 			}
 		});
 
 		userOptionsPane.setLayer(countryLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-		userOptionsPane.setLayer(candidateNameLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+		userOptionsPane.setLayer(nameLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(referenceIdLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(productTypeLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(productTypeDropdown, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(countryDropDown, javax.swing.JLayeredPane.DEFAULT_LAYER);
-		userOptionsPane.setLayer(candidateNameField, javax.swing.JLayeredPane.DEFAULT_LAYER);
+		userOptionsPane.setLayer(nameField, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(referenceIdField, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(searchButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -305,13 +348,13 @@ public class Manager extends javax.swing.JFrame {
 				.addGroup(userOptionsPaneLayout.createSequentialGroup().addContainerGap()
 						.addGroup(userOptionsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(productTypeLabel).addComponent(countryLabel)
-								.addComponent(candidateNameLabel).addComponent(referenceIdLabel))
+								.addComponent(referenceIdLabel).addComponent(nameLabel))
 						.addGap(48, 48, 48)
 						.addGroup(userOptionsPaneLayout
 								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
 								.addComponent(productTypeDropdown, 0, 366, Short.MAX_VALUE)
 								.addComponent(countryDropDown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(candidateNameField).addComponent(referenceIdField))
+								.addComponent(referenceIdField).addComponent(nameField))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 						.addComponent(searchButton, javax.swing.GroupLayout.DEFAULT_SIZE,
 								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -335,14 +378,14 @@ public class Manager extends javax.swing.JFrame {
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addGroup(userOptionsPaneLayout
 										.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(candidateNameLabel).addComponent(candidateNameField,
+										.addComponent(referenceIdLabel).addComponent(referenceIdField,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 								.addGroup(userOptionsPaneLayout
 										.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(referenceIdLabel).addComponent(referenceIdField,
+										.addComponent(nameLabel).addComponent(nameField,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -393,6 +436,7 @@ public class Manager extends javax.swing.JFrame {
 								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addComponent(headerPane).addComponent(userOptionsPane).addComponent(resultPane));
@@ -436,8 +480,8 @@ public class Manager extends javax.swing.JFrame {
 	}
 
 	private javax.swing.JLabel avatar;
-	private javax.swing.JTextField candidateNameField;
-	private javax.swing.JLabel candidateNameLabel;
+	private javax.swing.JTextField nameField;
+	private javax.swing.JLabel nameLabel;
 	private javax.swing.JComboBox<Object> countryDropDown;
 	private javax.swing.JLabel countryLabel;
 	private javax.swing.JButton generateBarcodeButton;

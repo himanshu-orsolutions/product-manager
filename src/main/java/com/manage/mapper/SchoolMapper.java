@@ -22,8 +22,8 @@ public class SchoolMapper {
 	public static School map(Document schoolDocument) {
 
 		School school = new School();
-		school.setCandidateName(
-				schoolDocument.getString("First Name") + " " + schoolDocument.getString("Last Name").trim());
+		school.setFirstName(schoolDocument.getString("First Name"));
+		school.setLastName(schoolDocument.getString("Last Name"));
 		school.setCountry(schoolDocument.getString("School country"));
 		school.setCentreName(schoolDocument.getString("Centre Name"));
 		school.setTotalLocalFee(schoolDocument.getString("Total Local Fee ($)"));
