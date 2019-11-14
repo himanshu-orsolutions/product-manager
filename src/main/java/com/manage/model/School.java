@@ -68,4 +68,11 @@ public class School {
 	public void setPaymentReference(String paymentReference) {
 		this.paymentReference = paymentReference;
 	}
+
+	/**
+	 * Gets the string representation of the IELTS model
+	 */
+	public String toString() {
+		return this.country + " " + this.candidateName + " " + this.registrationId;
+	}
 }
