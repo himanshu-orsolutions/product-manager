@@ -229,7 +229,6 @@ public class Manager extends javax.swing.JFrame {
 		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 		setLocationRelativeTo(null);
 
-
 		headerPane.setBackground(new java.awt.Color(254, 254, 254));
 		headerPane.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 		headerPane.setForeground(new java.awt.Color(254, 254, 254));
@@ -267,10 +266,10 @@ public class Manager extends javax.swing.JFrame {
 
 		searchButton.setText("Search");
 		searchButton.addActionListener(event -> {
-			String productType = (String) productTypeDropdown.getSelectedItem();
-			String country = (String) countryDropDown.getSelectedItem();
-			String candidateName = candidateNameField.getText();
-			String referenceId = referenceIdField.getText();
+			String productType = ((String) productTypeDropdown.getSelectedItem()).trim();
+			String country = ((String) countryDropDown.getSelectedItem()).trim();
+			String candidateName = candidateNameField.getText().trim();
+			String referenceId = referenceIdField.getText().trim();
 
 			// Searching for candidate
 			String searchResult = getInformation(productType, country, candidateName, referenceId);

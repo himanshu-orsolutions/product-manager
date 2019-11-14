@@ -26,7 +26,7 @@ public class IELTSMapper {
 		ielts.setLocation(ieltsDocument.getString("Location"));
 		ielts.setCandidateName(ieltsDocument.getString("Candidate Name"));
 		ielts.setReference(ieltsDocument.getString("Reference"));
-		ielts.setExamFormat(ieltsDocument.getString("Paper Based"));
+		ielts.setExamFormat(ieltsDocument.getString("Exam Format"));
 		ielts.setRegistrationDate(ieltsDocument.getString("Registration Date"));
 		ielts.setTestDate(ieltsDocument.getString("Test Date"));
 		ielts.setPaymentRef(ieltsDocument.getString("Payment Ref"));
