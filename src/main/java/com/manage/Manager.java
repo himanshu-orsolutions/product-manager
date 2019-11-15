@@ -193,7 +193,7 @@ public class Manager extends javax.swing.JFrame {
 		resultPane = new javax.swing.JLayeredPane();
 		avatar = new javax.swing.JLabel();
 		informationPane = new javax.swing.JScrollPane();
-		informationArea = new javax.swing.JTextArea();
+		informationArea = new javax.swing.JEditorPane("text/html", "");
 		generateBarcodeButton = new javax.swing.JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -277,23 +277,23 @@ public class Manager extends javax.swing.JFrame {
 				StringBuilder stringBuilder = new StringBuilder();
 				if (productType.equals("IELTS")) {
 					IELTS ielts = (IELTS) info;
-					stringBuilder.append("Candidate Name: " + ielts.getCandidateName());
-					stringBuilder.append("\n");
-					stringBuilder.append("Reference ID: " + ielts.getReference());
-					stringBuilder.append("\n");
-					stringBuilder.append("Location: " + ielts.getLocation());
-					stringBuilder.append("\n");
-					stringBuilder.append("Exam Format: " + ielts.getExamFormat());
-					stringBuilder.append("\n");
-					stringBuilder.append("Registration Date: " + ielts.getRegistrationDate());
-					stringBuilder.append("\n");
-					stringBuilder.append("Test Date: " + ielts.getTestDate());
-					stringBuilder.append("\n");
-					stringBuilder.append("Payment Ref: " + ielts.getPaymentRef());
-					stringBuilder.append("\n");
-					stringBuilder.append("Payment Type: " + ielts.getPaymentType());
-					stringBuilder.append("\n");
-					stringBuilder.append("Total: " + ielts.getTotal());
+					stringBuilder.append("<strong>Candidate Name: </strong>" + ielts.getCandidateName());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Reference ID: </strong>" + ielts.getReference());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Location: </strong>" + ielts.getLocation());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Exam Format: </strong>" + ielts.getExamFormat());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Registration Date: </strong>" + ielts.getRegistrationDate());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Test Date: </strong>" + ielts.getTestDate());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Payment Ref: </strong>" + ielts.getPaymentRef());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Payment Type: </strong>" + ielts.getPaymentType());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Total: </strong>" + ielts.getTotal());
 
 					// Building barcode data
 					barcodeDataBuilder.append("Candidate Name: " + ielts.getCandidateName());
@@ -305,20 +305,20 @@ public class Manager extends javax.swing.JFrame {
 					barcodeDataBuilder.append("Country: " + ielts.getCountry());
 				} else {
 					School school = (School) info;
-					stringBuilder.append("First Name: " + school.getFirstName());
-					stringBuilder.append("\n");
-					stringBuilder.append("Last Name: " + school.getLastName());
-					stringBuilder.append("\n");
-					stringBuilder.append("Reference ID: " + school.getRegistrationId());
-					stringBuilder.append("\n");
-					stringBuilder.append("Centre Name: " + school.getCentreName());
-					stringBuilder.append("\n");
-					stringBuilder.append("Total Local Fee($): " + school.getTotalLocalFee());
-					stringBuilder.append("\n");
-					stringBuilder.append("Number Of Exams: " + school.getNumberOfExams());
-					stringBuilder.append("\n");
-					stringBuilder.append("Payment Reference: " + school.getPaymentReference());
-					stringBuilder.append("\n");
+					stringBuilder.append("<strong>First Name: </strong>" + school.getFirstName());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Last Name: </strong>" + school.getLastName());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Reference ID: </strong>" + school.getRegistrationId());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Centre Name: </strong>" + school.getCentreName());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Total Local Fee($): </strong>" + school.getTotalLocalFee());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Number Of Exams: </strong>" + school.getNumberOfExams());
+					stringBuilder.append("<br>");
+					stringBuilder.append("<strong>Payment Reference: </strong>" + school.getPaymentReference());
+					stringBuilder.append("<br>");
 
 					// Building barcode data
 					barcodeDataBuilder
@@ -411,9 +411,6 @@ public class Manager extends javax.swing.JFrame {
 		avatar.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
 		informationPane.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-		informationArea.setColumns(20);
-		informationArea.setRows(5);
 		informationPane.setViewportView(informationArea);
 
 		generateBarcodeButton.setText("Generate Barcode");
@@ -497,7 +494,7 @@ public class Manager extends javax.swing.JFrame {
 	private javax.swing.JLabel countryLabel;
 	private javax.swing.JButton generateBarcodeButton;
 	private javax.swing.JLayeredPane headerPane;
-	private javax.swing.JTextArea informationArea;
+	private javax.swing.JEditorPane informationArea;
 	private javax.swing.JScrollPane informationPane;
 	private javax.swing.JLabel logo;
 	private javax.swing.JComboBox<String> productTypeDropdown;
