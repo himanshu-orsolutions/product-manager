@@ -234,7 +234,7 @@ public class Manager extends javax.swing.JFrame {
 		nameLabel.setText("Candidate Name");
 
 		referenceIdLabel.setText("Reference ID");
-		referenceIdField.setToolTipText("Please fill only last 7 numbers");
+		referenceIdLabel.setToolTipText("Please fill only last 7 numbers");
 		referenceIdField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -296,13 +296,13 @@ public class Manager extends javax.swing.JFrame {
 					stringBuilder.append("<strong>Total: </strong>" + ielts.getTotal());
 
 					// Building barcode data
-					barcodeDataBuilder.append("Candidate Name: " + ielts.getCandidateName());
-					barcodeDataBuilder.append("\n");
-					barcodeDataBuilder.append("Reference ID: " + ielts.getReference());
-					barcodeDataBuilder.append("\n");
-					barcodeDataBuilder.append("Total Amount: " + ielts.getTotal());
-					barcodeDataBuilder.append("\n");
-					barcodeDataBuilder.append("Country: " + ielts.getCountry());
+					barcodeDataBuilder.append("<strong>Candidate Name: </strong>" + ielts.getCandidateName());
+					barcodeDataBuilder.append("<br>");
+					barcodeDataBuilder.append("<strong>Reference ID: </strong>" + ielts.getReference());
+					barcodeDataBuilder.append("<br>");
+					barcodeDataBuilder.append("<strong>Total Amount: </strong>" + ielts.getTotal());
+					barcodeDataBuilder.append("<br>");
+					barcodeDataBuilder.append("<strong>Country: </strong>" + ielts.getCountry());
 				} else {
 					School school = (School) info;
 					stringBuilder.append("<strong>First Name: </strong>" + school.getFirstName());
@@ -321,14 +321,14 @@ public class Manager extends javax.swing.JFrame {
 					stringBuilder.append("<br>");
 
 					// Building barcode data
-					barcodeDataBuilder
-							.append("Candidate Name: " + (school.getFirstName() + " " + school.getLastName()).trim());
-					barcodeDataBuilder.append("\n");
-					barcodeDataBuilder.append("Reference ID: " + school.getRegistrationId());
-					barcodeDataBuilder.append("\n");
-					barcodeDataBuilder.append("Total Amount: " + school.getTotalLocalFee());
-					barcodeDataBuilder.append("\n");
-					barcodeDataBuilder.append("Country: " + school.getCountry());
+					barcodeDataBuilder.append("<strong>Candidate Name: </strong>"
+							+ (school.getFirstName() + " " + school.getLastName()).trim());
+					barcodeDataBuilder.append("<br>");
+					barcodeDataBuilder.append("<strong>Reference ID: </strong>" + school.getRegistrationId());
+					barcodeDataBuilder.append("<br>");
+					barcodeDataBuilder.append("<strong>Total Amount: </strong>" + school.getTotalLocalFee());
+					barcodeDataBuilder.append("<br>");
+					barcodeDataBuilder.append("<strong>Country: </strong>" + school.getCountry());
 				}
 				informationArea.setText(stringBuilder.toString());
 			}
