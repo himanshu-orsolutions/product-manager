@@ -353,6 +353,8 @@ public class Manager extends javax.swing.JFrame {
 			}
 		});
 
+		informationArea.setEditable(false); // information is uneditable
+
 		userOptionsPane.setLayer(countryLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(nameLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 		userOptionsPane.setLayer(referenceIdLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
