@@ -277,6 +277,10 @@ public class Manager extends javax.swing.JFrame {
 				StringBuilder stringBuilder = new StringBuilder();
 				if (productType.equals("IELTS")) {
 					IELTS ielts = (IELTS) info;
+					stringBuilder.append("Candidate Name: " + ielts.getCandidateName());
+					stringBuilder.append("\n");
+					stringBuilder.append("Reference ID: " + ielts.getReference());
+					stringBuilder.append("\n");
 					stringBuilder.append("Location: " + ielts.getLocation());
 					stringBuilder.append("\n");
 					stringBuilder.append("Exam Format: " + ielts.getExamFormat());
@@ -301,6 +305,12 @@ public class Manager extends javax.swing.JFrame {
 					barcodeDataBuilder.append("Country: " + ielts.getCountry());
 				} else {
 					School school = (School) info;
+					stringBuilder.append("First Name: " + school.getFirstName());
+					stringBuilder.append("\n");
+					stringBuilder.append("Last Name: " + school.getLastName());
+					stringBuilder.append("\n");
+					stringBuilder.append("Reference ID: " + school.getRegistrationId());
+					stringBuilder.append("\n");
 					stringBuilder.append("Centre Name: " + school.getCentreName());
 					stringBuilder.append("\n");
 					stringBuilder.append("Total Local Fee($): " + school.getTotalLocalFee());
