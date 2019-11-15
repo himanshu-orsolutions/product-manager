@@ -262,83 +262,94 @@ public class Manager extends javax.swing.JFrame {
 		countryDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(countries.toArray()));
 		searchButton.setText("Search");
 		StringBuilder barcodeDataBuilder = new StringBuilder();
+		StringBuilder barcodeReferenceInfo = new StringBuilder();
 
 		searchButton.addActionListener(event -> {
+
+			// Resetting the data builders
+			barcodeDataBuilder.delete(0, barcodeDataBuilder.length());
+			barcodeReferenceInfo.delete(0, barcodeReferenceInfo.length());
+
 			String productType = ((String) productTypeDropdown.getSelectedItem()).trim();
 			String country = ((String) countryDropDown.getSelectedItem()).trim();
 			String name = nameField.getText().trim();
 			String referenceId = referenceIdField.getText().trim();
 
-			// Searching for candidate
-			Object info = getInformation(productType, country, name, referenceId);
-			if (info == null) {
-				showErrorMessage("No information found!!");
+			if (name.equals("") || referenceId.equals("")) {
+				showErrorMessage("The name and reference cannot be empty.");
 			} else {
-				StringBuilder stringBuilder = new StringBuilder();
-				if (productType.equals("IELTS")) {
-					IELTS ielts = (IELTS) info;
-					stringBuilder.append("<strong>Candidate Name: </strong>" + ielts.getCandidateName());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Reference ID: </strong>" + ielts.getReference());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Location: </strong>" + ielts.getLocation());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Exam Format: </strong>" + ielts.getExamFormat());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Registration Date: </strong>" + ielts.getRegistrationDate());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Test Date: </strong>" + ielts.getTestDate());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Payment Ref: </strong>" + ielts.getPaymentRef());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Payment Type: </strong>" + ielts.getPaymentType());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Total: </strong>" + ielts.getTotal());
-
-					// Building barcode data
-					barcodeDataBuilder.append("<strong>Candidate Name: </strong>" + ielts.getCandidateName());
-					barcodeDataBuilder.append("<br>");
-					barcodeDataBuilder.append("<strong>Reference ID: </strong>" + ielts.getReference());
-					barcodeDataBuilder.append("<br>");
-					barcodeDataBuilder.append("<strong>Total Amount: </strong>" + ielts.getTotal());
-					barcodeDataBuilder.append("<br>");
-					barcodeDataBuilder.append("<strong>Country: </strong>" + ielts.getCountry());
+				// Searching for candidate
+				Object info = getInformation(productType, country, name, referenceId);
+				if (info == null) {
+					showErrorMessage("No information found!!");
 				} else {
-					School school = (School) info;
-					stringBuilder.append("<strong>First Name: </strong>" + school.getFirstName());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Last Name: </strong>" + school.getLastName());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Reference ID: </strong>" + school.getRegistrationId());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Centre Name: </strong>" + school.getCentreName());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Total Local Fee($): </strong>" + school.getTotalLocalFee());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Number Of Exams: </strong>" + school.getNumberOfExams());
-					stringBuilder.append("<br>");
-					stringBuilder.append("<strong>Payment Reference: </strong>" + school.getPaymentReference());
-					stringBuilder.append("<br>");
+					barcodeReferenceInfo.append(referenceIdField.getText());
+					StringBuilder stringBuilder = new StringBuilder();
+					if (productType.equals("IELTS")) {
+						IELTS ielts = (IELTS) info;
+						stringBuilder.append("<strong>Candidate Name: </strong>" + ielts.getCandidateName());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Reference ID: </strong>" + ielts.getReference());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Location: </strong>" + ielts.getLocation());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Exam Format: </strong>" + ielts.getExamFormat());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Registration Date: </strong>" + ielts.getRegistrationDate());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Test Date: </strong>" + ielts.getTestDate());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Payment Ref: </strong>" + ielts.getPaymentRef());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Payment Type: </strong>" + ielts.getPaymentType());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Total: </strong>" + ielts.getTotal());
 
-					// Building barcode data
-					barcodeDataBuilder.append("<strong>Candidate Name: </strong>"
-							+ (school.getFirstName() + " " + school.getLastName()).trim());
-					barcodeDataBuilder.append("<br>");
-					barcodeDataBuilder.append("<strong>Reference ID: </strong>" + school.getRegistrationId());
-					barcodeDataBuilder.append("<br>");
-					barcodeDataBuilder.append("<strong>Total Amount: </strong>" + school.getTotalLocalFee());
-					barcodeDataBuilder.append("<br>");
-					barcodeDataBuilder.append("<strong>Country: </strong>" + school.getCountry());
+						// Building barcode data
+						barcodeDataBuilder.append("<strong>Candidate Name: </strong>" + ielts.getCandidateName());
+						barcodeDataBuilder.append("<br>");
+						barcodeDataBuilder.append("<strong>Reference ID: </strong>" + ielts.getReference());
+						barcodeDataBuilder.append("<br>");
+						barcodeDataBuilder.append("<strong>Total Amount: </strong>" + ielts.getTotal());
+						barcodeDataBuilder.append("<br>");
+						barcodeDataBuilder.append("<strong>Country: </strong>" + ielts.getCountry());
+					} else {
+						School school = (School) info;
+						stringBuilder.append("<strong>First Name: </strong>" + school.getFirstName());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Last Name: </strong>" + school.getLastName());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Reference ID: </strong>" + school.getRegistrationId());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Centre Name: </strong>" + school.getCentreName());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Total Local Fee($): </strong>" + school.getTotalLocalFee());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Number Of Exams: </strong>" + school.getNumberOfExams());
+						stringBuilder.append("<br>");
+						stringBuilder.append("<strong>Payment Reference: </strong>" + school.getPaymentReference());
+						stringBuilder.append("<br>");
+
+						// Building barcode data
+						barcodeDataBuilder.append("<strong>Candidate Name: </strong>"
+								+ (school.getFirstName() + " " + school.getLastName()).trim());
+						barcodeDataBuilder.append("<br>");
+						barcodeDataBuilder.append("<strong>Reference ID: </strong>" + school.getRegistrationId());
+						barcodeDataBuilder.append("<br>");
+						barcodeDataBuilder.append("<strong>Total Amount: </strong>" + school.getTotalLocalFee());
+						barcodeDataBuilder.append("<br>");
+						barcodeDataBuilder.append("<strong>Country: </strong>" + school.getCountry());
+					}
+					informationArea.setText(stringBuilder.toString());
 				}
-				informationArea.setText(stringBuilder.toString());
 			}
 		});
 
 		generateBarcodeButton.addActionListener(event -> {
-			if (informationArea.getText().equals("")) {
+			if (barcodeDataBuilder.toString().equals("")) {
 				showErrorMessage("No candidate selected!!");
 			} else {
-				generateBarCode(referenceIdField.getText(), barcodeDataBuilder.toString());
+				generateBarCode(barcodeReferenceInfo.toString(), barcodeDataBuilder.toString());
 			}
 		});
 

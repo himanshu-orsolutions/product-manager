@@ -40,7 +40,7 @@ public class BarCodeGenerator {
 
 			// Preparing the canvas
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			BitmapCanvasProvider bitmapCanvasProvider = new BitmapCanvasProvider(outputStream, "image/x-png", 300,
+			BitmapCanvasProvider bitmapCanvasProvider = new BitmapCanvasProvider(outputStream, "image/x-png", 350,
 					BufferedImage.TYPE_BYTE_BINARY, false, 0);
 			code39Bean.generateBarcode(bitmapCanvasProvider, referenceNumber);
 			bitmapCanvasProvider.deviceText(searchResult, 1, 1, 400, Font.SERIF, 10, TextAlignment.TA_LEFT);
@@ -58,12 +58,12 @@ public class BarCodeGenerator {
 			resultGraphics.dispose();
 
 			// Combining both images
-			BufferedImage combined = new BufferedImage(400, 280, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage combined = new BufferedImage(600, 480, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D graphics = combined.createGraphics();
 			graphics.setColor(Color.white);
-			graphics.fillRect(0, 0, 400, 280);
-			graphics.drawImage(resultImage, 10, 0, null);
-			graphics.drawImage(barcodeImage, 200 - (barcodeImage.getWidth() / 2), 101, null);
+			graphics.fillRect(0, 0, 600, 480);
+			graphics.drawImage(resultImage, 10, 30, null);
+			graphics.drawImage(barcodeImage, 300 - (barcodeImage.getWidth() / 2), 141, null);
 			graphics.dispose();
 
 			// Converting the output stream to byte array
