@@ -2,11 +2,11 @@ package com.manage.util;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+
+import javax.swing.JEditorPane;
 
 import org.krysalis.barcode4j.TextAlignment;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
@@ -37,7 +37,6 @@ public class BarCodeGenerator {
 			code39Bean.setModuleWidth(0.1);
 			code39Bean.setQuietZone(1);
 			code39Bean.doQuietZone(true);
-			
 
 			// Preparing the canvas
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -53,20 +52,16 @@ public class BarCodeGenerator {
 			// Search result image
 			BufferedImage resultImage = new BufferedImage(500, 100, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D resultGraphics = resultImage.createGraphics();
-			resultGraphics.setColor(Color.black);
-			resultGraphics.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-			String[] lines = searchResult.split("\n");
-			FontMetrics fontMetrics = resultGraphics.getFontMetrics();
-			int y = 30;
-			for (String line : lines) {
-				resultGraphics.drawString(line, 0, y);
-				y += fontMetrics.getHeight();
-			}
+			JEditorPane jEditorPane = new JEditorPane("text/html", searchResult);
+			jEditorPane.setSize(400, 200);
+			jEditorPane.paint(resultGraphics);
 			resultGraphics.dispose();
 
 			// Combining both images
 			BufferedImage combined = new BufferedImage(400, 280, BufferedImage.TYPE_INT_ARGB);
-			Graphics graphics = combined.createGraphics();
+			Graphics2D graphics = combined.createGraphics();
+			graphics.setColor(Color.white);
+			graphics.fillRect(0, 0, 400, 280);
 			graphics.drawImage(resultImage, 10, 0, null);
 			graphics.drawImage(barcodeImage, 200 - (barcodeImage.getWidth() / 2), 101, null);
 			graphics.dispose();
@@ -76,6 +71,6 @@ public class BarCodeGenerator {
 		} catch (Exception exception) {
 			System.out.println("Error generating barcode");
 		}
-		return new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
+		return new BufferedImage(400, 280, BufferedImage.TYPE_INT_ARGB);
 	}
 }
