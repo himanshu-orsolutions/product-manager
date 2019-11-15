@@ -37,6 +37,7 @@ public class BarCodeGenerator {
 			code39Bean.setModuleWidth(0.1);
 			code39Bean.setQuietZone(1);
 			code39Bean.doQuietZone(true);
+			
 
 			// Preparing the canvas
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -56,7 +57,7 @@ public class BarCodeGenerator {
 			resultGraphics.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
 			String[] lines = searchResult.split("\n");
 			FontMetrics fontMetrics = resultGraphics.getFontMetrics();
-			int y = 20;
+			int y = 30;
 			for (String line : lines) {
 				resultGraphics.drawString(line, 0, y);
 				y += fontMetrics.getHeight();
