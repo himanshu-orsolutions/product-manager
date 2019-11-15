@@ -198,9 +198,9 @@ public class Manager extends javax.swing.JFrame {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setBackground(new java.awt.Color(254, 254, 254));
-		setMaximumSize(new java.awt.Dimension(630, 440));
-		setMinimumSize(new java.awt.Dimension(630, 440));
-		setPreferredSize(new java.awt.Dimension(630, 440));
+		setMaximumSize(new java.awt.Dimension(630, 500));
+		setMinimumSize(new java.awt.Dimension(630, 500));
+		setPreferredSize(new java.awt.Dimension(630, 500));
 		setResizable(false);
 		getContentPane().setLayout(null);
 		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
