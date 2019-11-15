@@ -121,6 +121,7 @@ public class Manager extends javax.swing.JFrame {
 		// The countries list
 		ieltsRecords.forEach(record -> countries.add(record.getCountry()));
 		schoolRecords.forEach(record -> countries.add(record.getCountry()));
+		countries.remove("");
 	}
 
 	/**
